@@ -23,27 +23,6 @@ public class Movie {
 }
 ```
 
-### MovieController.java
-```java
-@RestController // springframework.web.bind.annotation.RestController
-@RequestMapping("api/v1/movies") // springframework.web.bind.annotation.RequestMapping
-public class MovieController {
-    @Autowired // springframework.beans.factory.annotation.Autowired
-    private MovieService movieService;
-    @GetMapping // springframework.web.bind.annotation.GetMapping
-    public ResponseEntity<List<Movie>> getAllMovies(){ // springframework.http.ResponseEntity
-        return new ResponseEntity<List<Movie>>(movieService.allMovies(), HttpStatus.OK);
-	// springframework.http.HttpStatus
-    }
-
-    @GetMapping("/{imdbId}")
-    public ResponseEntity<Optional<Movie>> getOneMovie(@PathVariable String imdbId){
-    	// org.springframework.web.bind.annotation.PathVariable
-        return new ResponseEntity<Optional<Movie>>(movieService.oneMovie(imdbId), HttpStatus.OK);
-    }
-}
-```
-
 ### MovieRepository.java
 ```java
 @Repository // springframework.stereotype.Repository
@@ -66,6 +45,27 @@ public class MovieService {
 
     public Optional<Movie> oneMovie(String imdbId){
         return movieRepository.findMovieByImdbId(imdbId);
+    }
+}
+```
+
+### MovieController.java
+```java
+@RestController // springframework.web.bind.annotation.RestController
+@RequestMapping("api/v1/movies") // springframework.web.bind.annotation.RequestMapping
+public class MovieController {
+    @Autowired // springframework.beans.factory.annotation.Autowired
+    private MovieService movieService;
+    @GetMapping // springframework.web.bind.annotation.GetMapping
+    public ResponseEntity<List<Movie>> getAllMovies(){ // springframework.http.ResponseEntity
+        return new ResponseEntity<List<Movie>>(movieService.allMovies(), HttpStatus.OK);
+	// springframework.http.HttpStatus
+    }
+
+    @GetMapping("/{imdbId}")
+    public ResponseEntity<Optional<Movie>> getOneMovie(@PathVariable String imdbId){
+    	// org.springframework.web.bind.annotation.PathVariable
+        return new ResponseEntity<Optional<Movie>>(movieService.oneMovie(imdbId), HttpStatus.OK);
     }
 }
 ```
