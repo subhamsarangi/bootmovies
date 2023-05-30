@@ -3,13 +3,13 @@
 ## MOVIES
 ### Movie.java
 ```java
-@Document(collection = "movies")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Document(collection = "movies") // springframework.data.mongodb.core.mapping.Document
+@Data //lombok.Data
+@AllArgsConstructor // lombok.AllArgsConstructor
+@NoArgsConstructor // lombok.NoArgsConstructor
 public class Movie {
-    @Id
-    private ObjectId id;
+    @Id // springframework.data.annotation.Id
+    private ObjectId id; // bson.types.ObjectId
     private String imdbId;
     private String title;
     private String releaseDate;
@@ -17,7 +17,7 @@ public class Movie {
     private String poster;
     private List<String> genres;
     private List<String> backdrops;
-    @DocumentReference
+    @DocumentReference // springframework.data.mongodb.core.mapping.DocumentReference
     private List<Review> reviewIds; // embedded relationship 1-to-many
 
 }
@@ -25,18 +25,20 @@ public class Movie {
 
 ### MovieController.java
 ```java
-@RestController
-@RequestMapping("api/v1/movies")
+@RestController // springframework.web.bind.annotation.RestController
+@RequestMapping("api/v1/movies") // springframework.web.bind.annotation.RequestMapping
 public class MovieController {
-    @Autowired
+    @Autowired // springframework.beans.factory.annotation.Autowired
     private MovieService movieService;
-    @GetMapping
-    public ResponseEntity<List<Movie>> getAllMovies(){
+    @GetMapping // springframework.web.bind.annotation.GetMapping
+    public ResponseEntity<List<Movie>> getAllMovies(){ // springframework.http.ResponseEntity
         return new ResponseEntity<List<Movie>>(movieService.allMovies(), HttpStatus.OK);
+	// springframework.http.HttpStatus
     }
 
     @GetMapping("/{imdbId}")
     public ResponseEntity<Optional<Movie>> getOneMovie(@PathVariable String imdbId){
+    	// org.springframework.web.bind.annotation.PathVariable
         return new ResponseEntity<Optional<Movie>>(movieService.oneMovie(imdbId), HttpStatus.OK);
     }
 }
@@ -44,8 +46,9 @@ public class MovieController {
 
 ### MovieRepository.java
 ```java
-@Repository
+@Repository // springframework.stereotype.Repository
 public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
+    // springframework.data.mongodb.repository.MongoRepository
     Optional<Movie> findMovieByImdbId(String imdbId);
 
 }
@@ -53,7 +56,7 @@ public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
 
 ### MovieService.java
 ```java
-@Service
+@Service // org.springframework.stereotype.Service
 public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
@@ -69,12 +72,13 @@ public class MovieService {
 
 ### MoviesApplication.java
 ```java
-@SpringBootApplication
+@SpringBootApplication // springframework.boot.autoconfigure.SpringBootApplication
 @RestController
 public class MoviesApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MoviesApplication.class, args);
+		// springframework.boot.SpringApplication
 	}
 
 	@GetMapping("/")
